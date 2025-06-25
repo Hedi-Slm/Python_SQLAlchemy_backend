@@ -7,6 +7,7 @@ class Event(Base):
     __tablename__ = "events"
 
     id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)  # ADD THIS LINE
     contract_id = Column(Integer, ForeignKey("contracts.id"), nullable=False)
     client_id = Column(Integer, ForeignKey("clients.id"), nullable=False)
     support_id = Column(Integer, ForeignKey("users.id"), nullable=True)
@@ -19,4 +20,4 @@ class Event(Base):
 
     contract = relationship("Contract")
     client = relationship("Client")
-    support = relationship("User")
+    support_contact = relationship("User")
