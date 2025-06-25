@@ -26,28 +26,3 @@ class MainView:
         click.echo()
 
         return click.prompt(click.style("Votre choix"), type=str).strip()
-
-    def show_success(self, message: str):
-        """Display success message"""
-        click.echo()
-        click.echo(click.style(f"✅ {message}"))
-        click.echo()
-        self.wait_for_user()
-
-    def show_error(self, message: str):
-        """Display error message"""
-        click.echo()
-        click.echo(click.style(f"❌ {message}"))
-        click.echo()
-        self.wait_for_user()
-
-    def show_info(self, message: str):
-        """Display info message"""
-        click.echo()
-        click.echo(click.style(f"ℹ️  {message}"))
-        click.echo()
-        self.wait_for_user()
-
-    def wait_for_user(self):
-        """Wait for user to press Enter"""
-        click.prompt(click.style("Appuyez sur Entrée pour continuer..."), default="", show_default=False)
