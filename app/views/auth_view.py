@@ -1,5 +1,6 @@
 import click
 from typing import Tuple
+from app.views.utils_view import wait_for_user
 
 
 class AuthView:
@@ -38,14 +39,12 @@ class AuthView:
         click.echo()
         click.echo(click.style(f"✅ {message}"))
         click.echo()
-        self.wait_for_user()
 
     def show_error(self, message: str):
         """Display error message"""
         click.echo()
         click.echo(click.style(f"❌ {message}"))
         click.echo()
-        self.wait_for_user()
 
     def show_goodbye(self):
         """Display goodbye message"""
@@ -54,7 +53,3 @@ class AuthView:
         click.echo(click.style("👋 Merci d'avoir utilisé Epic Events CRM!"))
         click.echo(click.style("À bientôt !"))
         click.echo()
-
-    def wait_for_user(self):
-        """Wait for user to press Enter"""
-        click.prompt(click.style("Appuyez sur Entrée pour continuer..."), default="", show_default=False)
