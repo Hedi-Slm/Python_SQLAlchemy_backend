@@ -5,6 +5,7 @@ from app.controllers.event_menu_controller import EventMenuController
 from app.controllers.user_menu_controller import UserMenuController
 from app.views.main_view import MainView
 from app.models.user import UserRole
+from app.views.utils_view import show_error, show_success, show_info
 
 
 class MainController:
@@ -39,14 +40,14 @@ class MainController:
                     self.auth_controller.logout()
                     break
                 else:
-                    self.view.show_error("Choix invalide.")
+                    show_error("Choix invalide.")
 
             except KeyboardInterrupt:
-                self.view.show_info("Déconnexion en cours...")
+                show_info("Déconnexion en cours...")
                 self.auth_controller.logout()
                 break
             except Exception as e:
-                self.view.show_error(f"Une erreur s'est produite: {str(e)}")
+                show_error(f"Une erreur s'est produite: {str(e)}")
 
     def client_menu(self):
         """Handle clients menu navigation"""
@@ -69,4 +70,4 @@ class MainController:
             user_controller = UserMenuController(self.current_user)
             user_controller.handle_menu()
         else:
-            self.view.show_error("Accès non autorisé.")
+            show_error("Accès non autorisé.")
