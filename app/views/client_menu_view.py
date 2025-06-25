@@ -21,8 +21,8 @@ class ClientMenuView:
         if current_user.role == UserRole.COMMERCIAL:
             click.echo("2. ➕ Créer un nouveau client")
 
-        # COMMERCIAL and GESTION can update clients
-        if current_user.role in [UserRole.COMMERCIAL, UserRole.GESTION]:
+        # COMMERCIAL can update clients
+        if current_user.role == UserRole.COMMERCIAL:
             click.echo("3. ✏️  Modifier un client")
 
         click.echo("0. ⬅️  Retour au menu principal")
@@ -164,8 +164,6 @@ class ClientMenuView:
 
         if not clients:
             click.echo("Aucun client trouvé.")
-            click.echo()
-            click.pause("Appuyez sur Entrée pour continuer...")
             return
 
         for i, client in enumerate(clients, 1):
@@ -190,8 +188,6 @@ class ClientMenuView:
             click.echo("-" * 100)
 
         click.echo(f"\n Total: {len(clients)} client(s)")
-        click.echo()
-        click.pause("Appuyez sur Entrée pour continuer...")
 
     def get_client_selection(self, clients):
         """Get client selection from user"""
@@ -219,30 +215,7 @@ class ClientMenuView:
                 return clients[choice - 1]
             else:
                 click.echo("❌ Choix invalide.")
-                click.pause("Appuyez sur Entrée pour continuer...")
                 return None
         except (ValueError, KeyboardInterrupt, click.Abort):
             click.echo("❌ Sélection annulée.")
-            click.pause("Appuyez sur Entrée pour continuer...")
             return None
-
-    def show_error(self, message):
-        """Display error message"""
-        click.echo()
-        click.echo(click.style(f"❌ ERREUR: {message}", fg='red'))
-        click.echo()
-        click.pause("Appuyez sur Entrée pour continuer...")
-
-    def show_success(self, message):
-        """Display success message"""
-        click.echo()
-        click.echo(click.style(f"✅ SUCCÈS: {message}", fg='green'))
-        click.echo()
-        click.pause("Appuyez sur Entrée pour continuer...")
-
-    def show_info(self, message):
-        """Display info message"""
-        click.echo()
-        click.echo(click.style(f"ℹ️  INFO: {message}", fg='blue'))
-        click.echo()
-        click.pause("Appuyez sur Entrée for continuer...")
