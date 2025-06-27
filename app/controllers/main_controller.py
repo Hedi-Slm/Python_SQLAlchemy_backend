@@ -5,7 +5,7 @@ from app.controllers.event_menu_controller import EventMenuController
 from app.controllers.user_menu_controller import UserMenuController
 from app.views.main_view import MainView
 from app.models.user import UserRole
-from app.views.utils_view import show_error, show_success, show_info
+from app.views.utils_view import show_error, show_info
 
 
 class MainController:
