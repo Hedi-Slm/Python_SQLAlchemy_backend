@@ -1,6 +1,5 @@
 import click
 from typing import Tuple
-from app.views.utils_view import wait_for_user
 
 
 class AuthView:
@@ -33,18 +32,6 @@ class AuthView:
         password = click.prompt(click.style("Mot de passe"),type=str).strip()
 
         return email, password
-
-    def show_success(self, message: str):
-        """Display success message"""
-        click.echo()
-        click.echo(click.style(f"✅ {message}"))
-        click.echo()
-
-    def show_error(self, message: str):
-        """Display error message"""
-        click.echo()
-        click.echo(click.style(f"❌ {message}"))
-        click.echo()
 
     def show_goodbye(self):
         """Display goodbye message"""
