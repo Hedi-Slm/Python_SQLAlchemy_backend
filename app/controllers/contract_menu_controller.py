@@ -35,10 +35,10 @@ class ContractMenuController:
                 show_error("Choix invalide ou non autorisé.")
 
     def list_contracts(self):
-        """List all contracts based on user role"""
+        """List all contracts"""
         db = SessionLocal()
         try:
-            contracts = get_contracts_by_user(db, self.current_user)
+            contracts = get_all_contracts(db)
             self.view.display_contracts_list(contracts)
         except Exception as e:
             show_error(f"Erreur lors de la récupération des contrats: {str(e)}")
