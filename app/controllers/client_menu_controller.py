@@ -4,7 +4,7 @@ import sentry_sdk
 from app.models.user import UserRole
 from app.views.client_menu_view import ClientMenuView
 from app.views.utils_view import show_error, show_success, show_info
-from app.services.client_service import create_client, update_client, get_clients_by_user
+from app.services.client_service import create_client, update_client, get_clients_by_user, get_all_clients
 from app.db.connection import SessionLocal
 
 
@@ -32,10 +32,10 @@ class ClientMenuController:
                 show_error("Choix invalide ou non autorisé.")
 
     def list_clients(self):
-        """List all clients based on user role"""
+        """List all clients"""
         try:
             db = SessionLocal()
-            clients = get_clients_by_user(db, self.current_user)
+            clients = get_all_clients(db)
 
             if clients:
                 self.view.display_clients_list(clients)
