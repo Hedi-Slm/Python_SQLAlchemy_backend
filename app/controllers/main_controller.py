@@ -1,3 +1,5 @@
+import sentry_sdk
+
 from app.controllers.auth_controller import AuthController
 from app.controllers.client_menu_controller import ClientMenuController
 from app.controllers.contract_menu_controller import ContractMenuController
@@ -48,6 +50,7 @@ class MainController:
                 break
             except Exception as e:
                 show_error(f"Une erreur s'est produite: {str(e)}")
+                sentry_sdk.capture_exception(e)
 
     def client_menu(self):
         """Handle clients menu navigation"""

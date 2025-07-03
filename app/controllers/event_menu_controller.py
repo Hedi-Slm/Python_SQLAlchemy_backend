@@ -1,3 +1,5 @@
+import sentry_sdk
+
 from app.models.user import User, UserRole
 from app.models.contract import Contract
 from app.models.event import Event
@@ -41,6 +43,7 @@ class EventMenuController:
             self.view.display_events_list(events)
         except Exception as e:
             show_error(f"Erreur lors de la récupération des événements: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -58,6 +61,7 @@ class EventMenuController:
                 show_info("Aucun événement ne correspond aux critères de filtrage.")
         except Exception as e:
             show_error(f"Erreur lors du filtrage des événements: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -102,9 +106,11 @@ class EventMenuController:
             )
 
             show_success(f"Événement créé avec succès (ID: {new_event.id})")
+            sentry_sdk.capture_message(f"Event created successfully (ID: {new_event.id})", level="info")
 
         except Exception as e:
             show_error(f"Erreur lors de la création de l'événement: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -176,10 +182,12 @@ class EventMenuController:
             )
 
             show_success(f"Événement ID {updated_event.id} modifié avec succès.")
+            sentry_sdk.capture_message(f"Event ID {updated_event.id} updated successfully.", level="info")
 
         except PermissionError as e:
             show_error(str(e))
         except Exception as e:
             show_error(f"Erreur lors de la modification de l'événement: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()

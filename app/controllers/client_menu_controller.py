@@ -1,4 +1,6 @@
 from datetime import date
+import sentry_sdk
+
 from app.models.user import UserRole
 from app.views.client_menu_view import ClientMenuView
 from app.views.utils_view import show_error, show_success, show_info
@@ -42,6 +44,7 @@ class ClientMenuController:
 
         except Exception as e:
             show_error(f"Erreur lors de la récupération des clients: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -71,9 +74,12 @@ class ClientMenuController:
             client = create_client(db, self.current_user.id, **client_data)
 
             show_success(f"Client '{client.full_name}' créé avec succès (ID: {client.id})")
+            sentry_sdk.capture_message(
+                f"Client '{client.full_name}' created successfully (ID: {client.id})", level="info")
 
         except Exception as e:
             show_error(f"Erreur lors de la création du client: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -126,9 +132,13 @@ class ClientMenuController:
 
             show_success(f"Client '{updated_client.full_name}' modifié avec succès.")
 
+            sentry_sdk.capture_message(f"Client '{updated_client.full_name}'"
+                                       f" modifié par {self.current_user.name}", level="info")
+
         except PermissionError as e:
             show_error(str(e))
         except Exception as e:
             show_error(f"Erreur lors de la modification du client: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()

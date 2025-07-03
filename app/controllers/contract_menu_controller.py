@@ -1,3 +1,5 @@
+import sentry_sdk
+
 from app.models.user import UserRole
 from app.views.contract_menu_view import ContractMenuView
 from app.services.contract_service import *
@@ -40,6 +42,7 @@ class ContractMenuController:
             self.view.display_contracts_list(contracts)
         except Exception as e:
             show_error(f"Erreur lors de la récupération des contrats: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -93,10 +96,12 @@ class ContractMenuController:
             db.commit()
 
             show_success(f"Contrat créé avec succès (ID: {contract.id})")
+            sentry_sdk.capture_message(f"Contract created successfully (ID: {contract.id})", level="info")
 
         except Exception as e:
             db.rollback()
             show_error(f"Erreur lors de la création du contrat: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
 
@@ -139,6 +144,7 @@ class ContractMenuController:
             )
 
             show_success(f"Contrat {updated_contract.id} modifié avec succès.")
+            sentry_sdk.capture_message(f"Contract {updated_contract.id} modified successfully", level="info")
 
         except PermissionError as e:
             show_error(str(e))
@@ -178,6 +184,7 @@ class ContractMenuController:
 
         except Exception as e:
             show_error(f"Erreur lors du filtrage des contrats: {str(e)}")
+            sentry_sdk.capture_exception(e)
         finally:
             db.close()
             

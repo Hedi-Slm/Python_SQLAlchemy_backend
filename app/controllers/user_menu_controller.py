@@ -1,3 +1,5 @@
+import sentry_sdk
+
 from app.models.user import User, UserRole
 from app.views.user_menu_view import UserMenuView
 from app.services.user_service import create_user, update_user, delete_user, list_users
@@ -47,6 +49,7 @@ class UserMenuController:
 
         except Exception as e:
             show_error(f"Erreur lors de la récupération des utilisateurs: {str(e)}")
+            sentry_sdk.capture_exception(e)
 
     def create_user(self):
         """Create a new user (GESTION only)"""
@@ -85,9 +88,11 @@ class UserMenuController:
             db.close()
 
             show_success(f"Utilisateur '{new_user.name}' créé avec succès.")
+            sentry_sdk.capture_message(f"User '{new_user.name}' created successfully.", level="info")
 
         except Exception as e:
             show_error(f"Erreur lors de la création de l'utilisateur: {str(e)}")
+            sentry_sdk.capture_exception(e)
 
     def update_user(self):
         """Update an existing user (GESTION only)"""
@@ -153,6 +158,7 @@ class UserMenuController:
             db.close()
 
             show_success(f"Utilisateur '{updated_user.name}' modifié avec succès.")
+            sentry_sdk.capture_message(f"User '{updated_user.name}' updated successfully", level="info")
 
             # Warning if current user changed their own role
             if selected_user.id == self.current_user.id and 'role' in fields_to_update:
@@ -161,6 +167,7 @@ class UserMenuController:
 
         except Exception as e:
             show_error(f"Erreur lors de la modification de l'utilisateur: {str(e)}")
+            sentry_sdk.capture_exception(e)
 
     def delete_user(self):
         """Delete a user (GESTION only)"""
@@ -223,6 +230,8 @@ class UserMenuController:
             db.close()
 
             show_success(f"Utilisateur '{user_name}' supprimé avec succès.")
+            sentry_sdk.capture_message(f"User '{user_name}' deleted successfully", level="info")
 
         except Exception as e:
             show_error(f"Erreur lors de la suppression de l'utilisateur: {str(e)}")
+            sentry_sdk.capture_exception(e)
