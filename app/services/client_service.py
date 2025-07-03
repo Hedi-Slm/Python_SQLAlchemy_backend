@@ -21,6 +21,10 @@ def update_client(db: Session, client_id: int, updater: User, **fields) -> Clien
     return client
 
 
+def get_all_clients(db: Session):
+    return db.query(Client).all()
+
+
 def get_clients_by_user(db: Session, user: User):
     if user.role == UserRole.COMMERCIAL:
         return db.query(Client).filter_by(commercial_id=user.id).all()
