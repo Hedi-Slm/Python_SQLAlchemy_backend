@@ -35,6 +35,10 @@ def list_unpaid_contracts(db: Session):
     return db.query(Contract).filter(Contract.amount_due > 0).all()
 
 
+def get_all_contracts(db: Session):
+    return db.query(Contract).all()
+
+
 def get_contracts_by_user(db: Session, user: User):
     if user.role == UserRole.COMMERCIAL:
         return db.query(Contract).filter_by(commercial_id=user.id).all()
