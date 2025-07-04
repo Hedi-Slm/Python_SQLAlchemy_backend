@@ -129,8 +129,6 @@ class UserMenuView:
             click.echo(f"ID: {user.id} | {user.name}")
             click.echo(f"   📧 {user.email}")
             click.echo(f"   👤 Rôle: {role_display}")
-            click.echo(
-                f"   📅 Créé le: {user.creation_date.strftime('%d/%m/%Y') if hasattr(user, 'creation_date') and user.creation_date else 'N/A'}")
             click.echo("-" * 80)
 
         click.echo()
@@ -188,9 +186,5 @@ class UserMenuView:
         click.echo(f"Nom: {user.name}")
         click.echo(f"Email: {user.email}")
         click.echo(f"Rôle: {user.role.value.title()}")
-        if hasattr(user, 'creation_date') and user.creation_date:
-            click.echo(f"Créé le: {user.creation_date.strftime('%d/%m/%Y à %H:%M')}")
-        if hasattr(user, 'last_login') and user.last_login:
-            click.echo(f"Dernière connexion: {user.last_login.strftime('%d/%m/%Y à %H:%M')}")
         click.echo("=" * 40)
         click.echo()
