@@ -148,3 +148,7 @@ L'application utilise Sentry pour le monitoring des erreurs et la journalisation
 - Erreurs et exceptions
 - Créations, modifications et suppressions d'entités
 
+
+### Remarques
+Nous avons décidé de laisse l'accès au fichier .env pour ce projet dans le but de faciliter la configuration et les tests.
+Cela est une faille de sécurité et ne doit pas être utilisé en production.
