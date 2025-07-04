@@ -1,12 +1,13 @@
 import sentry_sdk
+from datetime import date
 
-from app.models.user import UserRole
+from app.models.user import User, UserRole
+from app.models.client import Client
+from app.models.contract import Contract
 from app.views.contract_menu_view import ContractMenuView
 from app.services.contract_service import *
-from app.models.client import Client
 from app.db.connection import SessionLocal
 from app.views.utils_view import show_error, show_success
-from datetime import date
 
 
 class ContractMenuController:
@@ -55,7 +56,7 @@ class ContractMenuController:
         db = SessionLocal()
         try:
             # Get all clients
-            clients = db.query(Client).all()
+            clients = get_all_clients(db)
             if not clients:
                 show_error("Aucun client disponible. Créez d'abord des clients.")
                 return
@@ -66,8 +67,7 @@ class ContractMenuController:
                 return
 
             # Get commercial users for assignment
-            from app.models.user import User
-            commercials = db.query(User).filter_by(role=UserRole.COMMERCIAL).all()
+            commercials = get_commercial_users(db)
 
             if not commercials:
                 show_error("Aucun commercial disponible.")
@@ -167,11 +167,9 @@ class ContractMenuController:
             elif filter_choice == "unpaid":
                 contracts = list_unpaid_contracts(db)
             elif filter_choice == "signed":
-                from app.models.contract import Contract
-                contracts = db.query(Contract).filter_by(is_signed=True).all()
+                contracts = list_signed_contracts(db)
             elif filter_choice == "paid":
-                from app.models.contract import Contract
-                contracts = db.query(Contract).filter_by(amount_due=0).all()
+                contracts = list_paid_contracts(db)
             else:
                 # Show all contracts based on user role
                 contracts = get_contracts_by_user(db, self.current_user)
@@ -187,4 +185,3 @@ class ContractMenuController:
             sentry_sdk.capture_exception(e)
         finally:
             db.close()
-            

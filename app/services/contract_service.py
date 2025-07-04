@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
+
 from app.models.contract import Contract
 from app.models.user import User, UserRole
+from app.models.client import Client
 
 
 def create_contract(db: Session, client_id: int, commercial_id: int, total_amount: float) -> Contract:
@@ -35,6 +37,15 @@ def list_unpaid_contracts(db: Session):
     return db.query(Contract).filter(Contract.amount_due > 0).all()
 
 
+def list_signed_contracts(db: Session):
+    return db.query(Contract).filter_by(is_signed=True).all()
+
+
+def list_paid_contracts(db: Session):
+    """Get all paid contracts (amount_due = 0)"""
+    return db.query(Contract).filter_by(amount_due=0).all()
+
+
 def get_all_contracts(db: Session):
     return db.query(Contract).all()
 
@@ -43,3 +54,12 @@ def get_contracts_by_user(db: Session, user: User):
     if user.role == UserRole.COMMERCIAL:
         return db.query(Contract).filter_by(commercial_id=user.id).all()
     return db.query(Contract).all()
+
+
+def get_all_clients(db: Session):
+    return db.query(Client).all()
+
+
+def get_commercial_users(db: Session):
+    """Get all commercial users"""
+    return db.query(User).filter_by(role=UserRole.COMMERCIAL).all()
