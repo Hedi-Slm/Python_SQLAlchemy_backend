@@ -82,3 +82,40 @@ def get_filtered_events(db: Session, filters: dict):
             query = query.filter(Event.date_end < filter_value)
 
     return query.all()
+
+
+def get_signed_contracts_for_commercial(db: Session, commercial_id: int):
+    """Get signed contracts for a specific commercial user"""
+    return db.query(Contract).filter(
+        Contract.commercial_id == commercial_id,
+        Contract.is_signed is True
+    ).options(joinedload(Contract.client)).all()
+
+
+def get_contract_by_id(db: Session, contract_id: int):
+    """Get a contract by its ID"""
+    return db.query(Contract).filter_by(id=contract_id).first()
+
+
+def get_events_for_support_user(db: Session, support_user_id: int):
+    """Get events that a support user can update (assigned to them or unassigned)"""
+    return db.query(Event).filter(
+        (Event.support_id == support_user_id) |
+        (Event.support_id is None)
+    ).options(
+        joinedload(Event.contract).joinedload(Contract.client),
+        joinedload(Event.support_contact)
+    ).all()
+
+
+def get_all_events_for_management(db: Session):
+    """Get all events for management users"""
+    return db.query(Event).options(
+        joinedload(Event.contract).joinedload(Contract.client),
+        joinedload(Event.support_contact)
+    ).all()
+
+
+def get_support_users(db: Session):
+    """Get all support users"""
+    return db.query(User).filter_by(role=UserRole.SUPPORT).all()

@@ -5,9 +5,8 @@ from app.models.contract import Contract
 from app.models.event import Event
 from app.views.event_menu_view import EvenMenuView
 from app.views.utils_view import show_error, show_success, show_info
-from app.services.event_service import create_event, update_event,get_filtered_events, get_events_with_details
+from app.services.event_service import *
 from app.db.connection import SessionLocal
-from sqlalchemy.orm import joinedload
 
 
 class EventMenuController:
@@ -73,11 +72,8 @@ class EventMenuController:
 
         db = SessionLocal()
         try:
-            # Get signed contracts for this commercial
-            signed_contracts = db.query(Contract).filter(
-                Contract.commercial_id == self.current_user.id,
-                Contract.is_signed is True
-            ).options(joinedload(Contract.client)).all()
+            # Get signed contracts for this commercial using service
+            signed_contracts = get_signed_contracts_for_commercial(db, self.current_user.id)
 
             if not signed_contracts:
                 show_error("Aucun contrat signé disponible pour créer un événement.")
@@ -89,8 +85,11 @@ class EventMenuController:
                 show_info("Création d'événement annulée.")
                 return
 
-            # Get the contract to access client_id
-            contract = db.query(Contract).filter_by(id=event_data['contract_id']).first()
+            # Get the contract to access client_id using service
+            contract = get_contract_by_id(db, event_data['contract_id'])
+            if not contract:
+                show_error("Contrat non trouvé.")
+                return
 
             # Create the event
             new_event = create_event(
@@ -122,22 +121,13 @@ class EventMenuController:
 
         db = SessionLocal()
         try:
-            # Get events based on user role
+            # Get events based on user role using service methods
             if self.current_user.role == UserRole.SUPPORT:
                 # Support users can only update their assigned events or unassigned ones
-                events = db.query(Event).filter(
-                    (Event.support_id == self.current_user.id) |
-                    (Event.support_id is None)
-                ).options(
-                    joinedload(Event.contract).joinedload(Contract.client),
-                    joinedload(Event.support_contact)
-                ).all()
+                events = get_events_for_support_user(db, self.current_user.id)
             else:
                 # Gestion can update all events
-                events = db.query(Event).options(
-                    joinedload(Event.contract).joinedload(Contract.client),
-                    joinedload(Event.support_contact)
-                ).all()
+                events = get_all_events_for_management(db)
 
             if not events:
                 show_error("Aucun événement disponible pour modification.")
@@ -149,10 +139,10 @@ class EventMenuController:
                 show_info("Modification annulée.")
                 return
 
-            # Get support users for assignment (only for GESTION)
+            # Get support users for assignment (only for GESTION) using service
             support_users = None
             if self.current_user.role == UserRole.GESTION:
-                support_users = db.query(User).filter_by(role=UserRole.SUPPORT).all()
+                support_users = get_support_users(db)
 
             # Get updated data
             update_data = self.view.get_event_update_data(selected_event, support_users)
