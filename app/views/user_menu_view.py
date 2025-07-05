@@ -62,7 +62,8 @@ class UserMenuView:
         # Ask if user wants to change password
         if click.confirm("Voulez-vous changer le mot de passe ?", default=False):
             data['password'] = click.prompt("Nouveau mot de passe", type=str, hide_input=True).strip()
-            password_confirm = click.prompt("Confirmer le nouveau mot de passe", type=str, hide_input=True).strip()
+            password_confirm = click.prompt("Confirmer le nouveau mot de passe",
+                                            type=str, hide_input=True).strip()
 
             if data['password'] != password_confirm:
                 click.echo("❌ Les mots de passe ne correspondent pas.")

@@ -1,9 +1,6 @@
 import sentry_sdk
 from datetime import date
 
-from app.models.user import User, UserRole
-from app.models.client import Client
-from app.models.contract import Contract
 from app.views.contract_menu_view import ContractMenuView
 from app.services.contract_service import *
 from app.db.connection import SessionLocal
@@ -161,7 +158,6 @@ class ContractMenuController:
             # Get filter criteria
             filter_choice = self.view.get_contract_filter()
 
-            contracts = []
             if filter_choice == "unsigned":
                 contracts = list_unsigned_contracts(db)
             elif filter_choice == "unpaid":

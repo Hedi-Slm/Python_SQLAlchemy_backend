@@ -21,10 +21,12 @@ def create_contract(db: Session, client_id: int, commercial_id: int, total_amoun
 
 def update_contract(db: Session, contract_id: int, updater: User, **fields) -> Contract:
     contract = db.query(Contract).filter_by(id=contract_id).first()
+
     if updater.role == UserRole.COMMERCIAL and contract.commercial_id != updater.id:
         raise PermissionError("You can only update your own contracts.")
     for key, value in fields.items():
         setattr(contract, key, value)
+
     db.commit()
     return contract
 

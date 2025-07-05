@@ -126,8 +126,8 @@ class EvenMenuView:
 
             click.echo(f"ID: {event.id} | {event.name}")
             click.echo(f"   Client: {event.contract.client.full_name} | Contrat ID: {event.contract.id}")
-            click.echo(
-                f"   📅 {event.date_start.strftime('%d/%m/%Y %H:%M')} → {event.date_end.strftime('%d/%m/%Y %H:%M')}")
+            click.echo(f"   📅 {event.date_start.strftime('%d/%m/%Y %H:%M')} →"
+                       f" {event.date_end.strftime('%d/%m/%Y %H:%M')}")
             click.echo(f"   📍 {event.location} | 👥 {event.attendees} participants")
             click.echo(f"   {support_status} Support: {support_name}")
             if event.notes:

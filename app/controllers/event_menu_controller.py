@@ -1,8 +1,5 @@
 import sentry_sdk
 
-from app.models.user import User, UserRole
-from app.models.contract import Contract
-from app.models.event import Event
 from app.views.event_menu_view import EvenMenuView
 from app.views.utils_view import show_error, show_success, show_info
 from app.services.event_service import *
@@ -48,6 +45,7 @@ class EventMenuController:
 
     def filter_events(self):
         """Filter events (available to all users)"""
+
         db = SessionLocal()
         try:
             filter_criteria = self.view.get_event_filter(self.current_user)
@@ -72,7 +70,7 @@ class EventMenuController:
 
         db = SessionLocal()
         try:
-            # Get signed contracts for this commercial using service
+            # Get signed contracts for current commercial
             signed_contracts = get_signed_contracts_for_commercial(db, self.current_user.id)
 
             if not signed_contracts:
@@ -139,7 +137,7 @@ class EventMenuController:
                 show_info("Modification annulée.")
                 return
 
-            # Get support users for assignment (only for GESTION) using service
+            # Get support users for assignment (only for GESTION)
             support_users = None
             if self.current_user.role == UserRole.GESTION:
                 support_users = get_support_users(db)

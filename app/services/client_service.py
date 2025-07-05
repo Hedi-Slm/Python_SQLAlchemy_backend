@@ -13,10 +13,12 @@ def create_client(db: Session, commercial_id: int, **data) -> Client:
 
 def update_client(db: Session, client_id: int, updater: User, **fields) -> Client:
     client = db.query(Client).filter_by(id=client_id).first()
+
     if updater.role == UserRole.COMMERCIAL and client.commercial_id != updater.id:
         raise PermissionError("You can only update your own clients.")
     for key, value in fields.items():
         setattr(client, key, value)
+
     db.commit()
     return client
 

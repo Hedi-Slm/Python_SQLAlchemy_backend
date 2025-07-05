@@ -54,10 +54,8 @@ def get_all_events(db: Session):
 
 
 def get_events_with_details(db: Session):
-    return db.query(Event).options(
-        joinedload(Event.contract).joinedload(Contract.client),
-        joinedload(Event.support_contact)
-    ).all()
+    return db.query(Event).options(joinedload(Event.contract).joinedload(Contract.client),
+                                   joinedload(Event.support_contact)).all()
 
 
 def get_filtered_events(db: Session, filters: dict):
@@ -86,10 +84,8 @@ def get_filtered_events(db: Session, filters: dict):
 
 def get_signed_contracts_for_commercial(db: Session, commercial_id: int):
     """Get signed contracts for a specific commercial user"""
-    return db.query(Contract).filter(
-        Contract.commercial_id == commercial_id,
-        Contract.is_signed is True
-    ).options(joinedload(Contract.client)).all()
+    return db.query(Contract).filter(Contract.commercial_id == commercial_id,
+                                     Contract.is_signed is True).options(joinedload(Contract.client)).all()
 
 
 def get_contract_by_id(db: Session, contract_id: int):
@@ -99,21 +95,14 @@ def get_contract_by_id(db: Session, contract_id: int):
 
 def get_events_for_support_user(db: Session, support_user_id: int):
     """Get events that a support user can update (assigned to them or unassigned)"""
-    return db.query(Event).filter(
-        (Event.support_id == support_user_id) |
-        (Event.support_id is None)
-    ).options(
-        joinedload(Event.contract).joinedload(Contract.client),
-        joinedload(Event.support_contact)
-    ).all()
+    return db.query(Event).filter((Event.support_id == support_user_id) | (Event.support_id is None)).options(
+        joinedload(Event.contract).joinedload(Contract.client), joinedload(Event.support_contact)).all()
 
 
 def get_all_events_for_management(db: Session):
     """Get all events for management users"""
-    return db.query(Event).options(
-        joinedload(Event.contract).joinedload(Contract.client),
-        joinedload(Event.support_contact)
-    ).all()
+    return db.query(Event).options(joinedload(Event.contract).joinedload(Contract.client),
+                                   joinedload(Event.support_contact)).all()
 
 
 def get_support_users(db: Session):

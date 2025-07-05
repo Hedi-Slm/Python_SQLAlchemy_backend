@@ -1,6 +1,5 @@
 import sentry_sdk
 
-from app.models.user import User, UserRole
 from app.views.user_menu_view import UserMenuView
 from app.services.user_service import *
 from app.db.connection import SessionLocal

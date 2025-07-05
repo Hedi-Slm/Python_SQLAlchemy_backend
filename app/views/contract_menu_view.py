@@ -112,7 +112,7 @@ class ContractMenuView:
             if contract.date_created:
                 click.echo(f"   Créé le: {contract.date_created.strftime('%d/%m/%Y')}")
             else:
-                click.echo(f"   Créé le: Non renseigné")
+                click.echo("   Créé le: Non renseigné")
 
             click.echo("-" * 100)
 

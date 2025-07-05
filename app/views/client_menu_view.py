@@ -140,7 +140,8 @@ class ClientMenuView:
 
             if data['company_name'] != current_company:
                 click.echo(
-                    f"Entreprise: {current_company or 'Non renseignée'} → {data['company_name'] or 'Non renseignée'}")
+                    f"Entreprise: {current_company or 'Non renseignée'} →"
+                    f" {data['company_name'] or 'Non renseignée'}")
                 changes_made = True
 
             if not changes_made:

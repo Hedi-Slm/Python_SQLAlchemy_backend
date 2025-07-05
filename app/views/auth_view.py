@@ -27,9 +27,9 @@ class AuthView:
         click.echo("🔐 CONNEXION")
         click.echo("-" * 15)
 
-        email = click.prompt(click.style("Email"),type=str).strip()
+        email = click.prompt(click.style("Email"), type=str).strip()
 
-        password = click.prompt(click.style("Mot de passe"),type=str).strip()
+        password = click.prompt(click.style("Mot de passe"), type=str).strip()
 
         return email, password
 
