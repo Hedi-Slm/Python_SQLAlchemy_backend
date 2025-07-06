@@ -85,7 +85,7 @@ def get_filtered_events(db: Session, filters: dict):
 def get_signed_contracts_for_commercial(db: Session, commercial_id: int):
     """Get signed contracts for a specific commercial user"""
     return db.query(Contract).filter(Contract.commercial_id == commercial_id,
-                                     Contract.is_signed is True).options(joinedload(Contract.client)).all()
+                                     Contract.is_signed == True).options(joinedload(Contract.client)).all()
 
 
 def get_contract_by_id(db: Session, contract_id: int):
