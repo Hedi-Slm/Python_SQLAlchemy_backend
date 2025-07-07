@@ -50,6 +50,8 @@ class ClientMenuController:
 
     def create_client(self):
         """Create a new client (COMMERCIAL only)"""
+        db = None
+
         if self.current_user.role != UserRole.COMMERCIAL:
             show_error("Accès non autorisé. Seuls les commerciaux peuvent créer des clients.")
             return
@@ -81,7 +83,8 @@ class ClientMenuController:
             show_error(f"Erreur lors de la création du client: {str(e)}")
             sentry_sdk.capture_exception(e)
         finally:
-            db.close()
+            if db is not None:
+                db.close()
 
     def update_client(self):
         """Update an existing client COMMERCIAL"""
